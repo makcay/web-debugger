@@ -2,7 +2,7 @@ export const SET_DIRECTION = "SET_DIRECTION"
 export const SET_KEY_VALUE = "SET_KEY_VALUE"
 export const SET_JAVA_CODE = "SET_JAVA_CODE"
 export const SET_DEBUG_ACTION = "SET_DEBUG_ACTION"
-
+export const HIGHLIGHT_LINE = "HIGHLIGHT_LINE"
 
 export const DIRECTION_FORWARD = 1;
 export const DIRECTION_BACKWARD = 2;
@@ -36,6 +36,14 @@ export function createDebugerAction(debuggerAction){
 	let action={
 		type: SET_DEBUG_ACTION,
 		data: debuggerAction
+	}
+	return action
+}
+
+export function createHighlightLineAction(line){
+	let action={
+		type: HIGHLIGHT_LINE,
+		data: line
 	}
 	return action
 }

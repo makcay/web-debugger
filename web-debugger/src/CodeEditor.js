@@ -2,6 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux'
 import * as CodeEditorActions from './actions/CodeEditorAction'
 import AceEditor from "react-ace";
+import './css/CodeEditor.css'
 
 import "ace-builds/src-noconflict/mode-java";
 import "ace-builds/src-noconflict/theme-github";
@@ -13,16 +14,8 @@ class CodeEditor extends React.Component {
   componentWillUnmount() {
   }
 
-  componentWillReceiveProps(nextProps, nextContext) {
-    this.setState(nextProps.state)
-  }
-
   constructor() {
     super()
-    this.state = {
-      direction: CodeEditorActions.DIRECTION_FORWARD,
-      code: ""
-    }
     this.onCodeChange = this.onCodeChange.bind(this)
     this.handleChange = this.handleChange.bind(this)
     this.buttonClicked = this.buttonClicked.bind(this)
@@ -38,26 +31,24 @@ class CodeEditor extends React.Component {
           theme="github"
           onChange={this.onCodeChange}
           name="code"
-          value={this.state.code}
+          value={this.props.state.code}
           editorProps={{ $blockScrolling: true }}
+          markers={this.props.state.markers}
         />
       </label>
-{/*
-      <br />
-      <label>
-        <input type="radio" name="gender" value="male" checked={this.state.gender === "male"} onChange={this.handleChange} />
-        Male
-        </label>
-*/}
     <br/>
       <button onClick={this.buttonClicked}>resume</button>
       <br/>
-      <label>{this.state.result}</label>
+      <label>{this.props.state.result}</label>
     </div>
   }
 
   onCodeChange(newValue) {
     this.props.dispatch(CodeEditorActions.createSetJavaCodeAction(newValue))
+  }
+
+  highLightLine(line){
+    this.props.dispatch(CodeEditorActions.createHighlightLineAction(line))
   }
 
   handleChange(event) {
@@ -69,17 +60,6 @@ class CodeEditor extends React.Component {
   buttonClicked() {
     this.props.dispatch(CodeEditorActions.createDebugerAction(CodeEditorActions.DEBUGGER_ACTION_RESUME))
   }
-
-  /*
-  changeState(){
-    this.setState((prevState) => this.newState(prevState))
-  }
-
-  newState(prevState){
-    //return {count: prevState.count+1}
-    return prevState;
-  }
-  */
 
 }
 

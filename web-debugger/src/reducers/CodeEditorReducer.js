@@ -12,6 +12,13 @@ export function CodeEditorReducer(state, action){
 	  if (action.data===CodeEditorActions.DEBUGGER_ACTION_RESUME){
 		  newstate["result"]=state.code
 	  }
+  } else if (action.type===CodeEditorActions.HIGHLIGHT_LINE){
+    let line=action.data
+    if (line>0){
+      let markers=[];
+      markers.push({startRow:line-1,startCol:0,endRow:line-1,endCol:1,className: 'replacement_marker', type: 'text'})
+      newstate["markers"]=markers
+    }
   }
   return newstate;
 }
