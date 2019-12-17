@@ -8,7 +8,13 @@ import "ace-builds/src-noconflict/mode-java";
 import "ace-builds/src-noconflict/theme-github";
 
 class CodeEditor extends React.Component {
+  defaultCode="public class Test {\n\n"
+            + " public static void main(String[] args) {\n\n"
+            +"  }\n"
+            +"}"
+
   componentDidMount() {
+    this.props.state.code=this.defaultCode
   }
 
   componentWillUnmount() {
@@ -31,13 +37,14 @@ class CodeEditor extends React.Component {
           theme="github"
           onChange={this.onCodeChange}
           name="code"
+          defaultValue={this.defaultCode}
           value={this.props.state.code}
           editorProps={{ $blockScrolling: true }}
           markers={this.props.state.markers}
         />
       </label>
     <br/>
-      <button onClick={this.buttonClicked}>resume</button>
+      <button onClick={() => this.buttonClicked("start")}>Start</button>
       <br/>
       <label>{this.props.state.result}</label>
     </div>
@@ -57,8 +64,21 @@ class CodeEditor extends React.Component {
     this.props.dispatch(action)
   }
 
-  buttonClicked() {
-    this.props.dispatch(CodeEditorActions.createDebugerAction(CodeEditorActions.DEBUGGER_ACTION_RESUME))
+  buttonClicked(buttonAction) {
+    switch(buttonAction){
+      case "start":
+        this.handleStart();
+        break;
+      case "resume":
+        this.props.dispatch(CodeEditorActions.createDebugerAction(CodeEditorActions.DEBUGGER_ACTION_RESUME))
+        break;
+      default:
+        break;
+    }
+  }
+
+  handleStart(){
+    
   }
 
 }
