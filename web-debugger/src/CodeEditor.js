@@ -3,6 +3,7 @@ import { connect } from 'react-redux'
 import * as CodeEditorActions from './actions/CodeEditorAction'
 import AceEditor from "react-ace";
 import './css/CodeEditor.css'
+import {remoteJdwpLaunch} from './jdwpLauncher'
 
 import "ace-builds/src-noconflict/mode-java";
 import "ace-builds/src-noconflict/theme-github";
@@ -78,7 +79,26 @@ class CodeEditor extends React.Component {
   }
 
   handleStart(){
-    
+    this.handleStartAsync();
+  }
+
+  async handleStartAsync(){
+    const vm = await remoteJdwpLaunch({
+      mainClass: 'Test',
+      remoteHost: '127.0.0.1',
+      remotePort: '9001',
+      vmArgs: [ '-Dfile.encoding=UTF-8', '-Xdebug', '-Xnoagent', '-Djava.compiler=NONE' ],
+      classPaths: [ __dirname ],
+    });
+    if (vm!=null){
+      vm.on('event', async ({ events }) => {
+        console.log(events);
+      });
+      
+      await vm.ready();
+      await vm.resume();
+    }
+
   }
 
 }
